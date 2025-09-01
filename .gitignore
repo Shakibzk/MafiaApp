@@ -1,7 +1,9 @@
 .idea
 *.iml
 
+
 #Backend
+
 /backend/HELP.md
 /backend/target/
 /backend/.mvn/wrapper/maven-wrapper.jar
@@ -9,3 +11,12 @@
 /backend/!**/src/test/**/target/
 /backend/mvnw
 /backend/mvnw.cmd
+/backend/.mvn
+
+
+#Frontend
+
+/frontend/node_modules
+/frontend/dist
+/frontend/dist-ssr
+/frontend/*.local
