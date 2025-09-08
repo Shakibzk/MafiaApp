@@ -10,10 +10,10 @@ export default defineConfig({
             '/oauth2': 'http://localhost:8080',
             '/login': 'http://localhost:8080',
 
-            // اگه API جدا هم داری
+            //  API جدا
             '/api': 'http://localhost:8080',
         },
-        port: 5173, // پورت Vite (اختیاری ولی شفافه)
+        port: 5173,
     },
 })
 
