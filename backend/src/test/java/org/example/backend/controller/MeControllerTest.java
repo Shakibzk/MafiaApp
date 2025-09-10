@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -21,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = MeController.class)
-@AutoConfigureMockMvc(addFilters = false)
+@AutoConfigureMockMvc(addFilters = false) // فیلترهای امنیتی غیرفعال؛ ریدایرکت/CSRF نداریم
 @Import(MeControllerTest.Config.class)
 class MeControllerTest {
 
@@ -38,7 +39,8 @@ class MeControllerTest {
 
     @Test
     void shouldReturnUnauthenticated_WhenNoAuth() throws Exception {
-        mockMvc.perform(get("/api/user"))
+        // بدون کاربر در کانتکست → authenticated=false
+        mockMvc.perform(get("/api/user").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.authenticated").value(false));
     }
@@ -49,7 +51,7 @@ class MeControllerTest {
         User user = new User("existingUser", "testuser", "male", true, "Ali", "https://example.com/avatar.png");
         given(userService.findById("existingUser")).willReturn(Optional.of(user));
 
-        mockMvc.perform(get("/api/user"))
+        mockMvc.perform(get("/api/user").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.authenticated").value(true))
                 .andExpect(jsonPath("$.user.username").value("testuser"))
@@ -59,11 +61,11 @@ class MeControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "notfound")
+    @WithMockUser(username = "notfound") // کاربر لاگین‌شده اما در DB نیست
     void shouldReturn404_WhenUserNotFound() throws Exception {
         given(userService.findById("notfound")).willReturn(Optional.empty());
 
-        mockMvc.perform(get("/api/user"))
+        mockMvc.perform(get("/api/user").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.error").value("User not found"));
     }
