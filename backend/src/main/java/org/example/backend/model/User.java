@@ -15,10 +15,14 @@ public class User {
     @Id
     private String id;
 
-    @Indexed(unique = true)
+    @Indexed(unique = true, sparse = true)
     private String username;
 
     private String gender;
 
     private boolean acceptedAgb;
+
+    private String firstName;
+
+    private String avatarUrl;
 }

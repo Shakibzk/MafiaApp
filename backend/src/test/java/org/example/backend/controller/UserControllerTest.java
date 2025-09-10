@@ -7,47 +7,52 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Map;
 
+import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@AutoConfigureMockMvc
+@WebMvcTest(controllers = UserController.class)
+@AutoConfigureMockMvc(addFilters = false)
+@Import(UserControllerTest.Config.class)
 class UserControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+    @TestConfiguration
+    static class Config {
+        @Bean
+        UserService userService() {
+            return Mockito.mock(UserService.class);
+        }
+    }
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @MockBean
-    private UserService userService; // ✅ Mock شده، نیاز به Bean واقعی نیست
+    @Autowired private MockMvc mockMvc;
+    @Autowired private ObjectMapper objectMapper;
+    @Autowired private UserService userService;
 
     @Test
     void register_ShouldCreateUser_WhenValid() throws Exception {
-        // کاربر Mock برای برگشت از UserService
-        User mockUser = new User("123", "testuser", "male", false);
+        User mockUser = new User("123", "testuser", "male", false, null, null);
+        given(userService.registerUser("testuser", "male")).willReturn(mockUser);
 
-        // وقتی متد registerUser صدا زده بشه، mockUser برگردون
-        Mockito.when(userService.registerUser("testuser", "male"))
-                .thenReturn(mockUser);
-
-        // اجرای درخواست MockMvc
         mockMvc.perform(post("/api/users/register")
-                        .contentType(MediaType.APPLICATION_JSON)
+                        .contentType("application/json")
                         .content(objectMapper.writeValueAsString(
                                 Map.of("username", "testuser", "gender", "male")
                         )))
-                .andExpect(status().isCreated())   // ✅ 201 Created
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.username").value("testuser"))
                 .andExpect(jsonPath("$.gender").value("male"));
     }
 }
+
+
+
+
