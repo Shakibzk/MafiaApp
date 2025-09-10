@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import appLogo from "./assets/app-logo.png"; // لوگو
+import appLogo from "./assets/app-logo.png";
 
 const AgbPage: React.FC = () => {
     const [checked1, setChecked1] = useState(false);
@@ -12,13 +12,10 @@ const AgbPage: React.FC = () => {
     const handleSubmit = async () => {
         if (checked1 && checked2) {
             try {
-                // 🆕 ذخیره AGB در بک‌اند
                 await fetch("http://localhost:8080/api/users/accept-agb", {
                     method: "POST",
                     credentials: "include",
                 });
-
-                // بعد از تایید → برو به صفحه GameMenuPage
                 navigate("/game");
             } catch (err) {
                 console.error("Fehler beim Speichern der AGB:", err);
@@ -50,7 +47,7 @@ Der Anbieter behält sich das Recht vor, diese AGB jederzeit zu ändern. Änderu
 
 7. Anwendbares Recht
 Es gilt das Recht der Bundesrepublik Deutschland.
-    `;
+  `;
 
     const privacyText = `
 1. Verantwortlicher
@@ -76,7 +73,9 @@ Jeder Nutzer hat das Recht auf Auskunft, Berichtigung, Löschung oder Einschrän
 
 7. Kontakt
 Bei Fragen zum Datenschutz können Nutzer den Betreiber über die im Impressum angegebene E-Mail-Adresse kontaktieren.
-    `;
+  `;
+
+    const dialogId = showModal === "agb" ? "agb-dialog" : "privacy-dialog";
 
     return (
         <div
@@ -94,16 +93,12 @@ Bei Fragen zum Datenschutz können Nutzer den Betreiber über die im Impressum a
                 flexDirection: "column",
             }}
         >
-            {/* لوگو */}
+            {/* Logo */}
             <div style={{ marginBottom: "20px" }}>
                 <img
                     src={appLogo}
                     alt="Mafia Logo"
-                    style={{
-                        width: "80px",
-                        height: "80px",
-                        objectFit: "contain",
-                    }}
+                    style={{ width: "80px", height: "80px", objectFit: "contain" }}
                 />
             </div>
 
@@ -129,7 +124,7 @@ Bei Fragen zum Datenschutz können Nutzer den Betreiber über die im Impressum a
                     MAFIA
                 </h1>
 
-                <p style={{ marginBottom: "12px", fontSize: "14px", lineHeight: "1.5" }}>
+                <p style={{ marginBottom: "12px", fontSize: "14px", lineHeight: 1.5 }}>
                     Wenn du diese App verwendest, hast du die Möglichkeit bestimmte persönliche Informationen
                     einzugeben, z. B. E-Mail oder einen Benutzernamen. Zum Speichern dieser Daten benötigen
                     wir deine Zustimmung.
@@ -168,21 +163,40 @@ Bei Fragen zum Datenschutz können Nutzer den Betreiber über die im Impressum a
                         fontSize: "14px",
                     }}
                 >
-                    <span
+                    <button
+                        type="button"
                         onClick={() => setShowModal("agb")}
-                        style={{ color: "#646cff", cursor: "pointer" }}
+                        style={{
+                            color: "#646cff",
+                            cursor: "pointer",
+                            background: "transparent",
+                            border: "none",
+                            padding: 0,
+                        }}
+                        aria-haspopup="dialog"
+                        aria-controls="agb-dialog"
                     >
                         Geschäftsbedingungen
-                    </span>
-                    <span
+                    </button>
+                    <button
+                        type="button"
                         onClick={() => setShowModal("privacy")}
-                        style={{ color: "#646cff", cursor: "pointer" }}
+                        style={{
+                            color: "#646cff",
+                            cursor: "pointer",
+                            background: "transparent",
+                            border: "none",
+                            padding: 0,
+                        }}
+                        aria-haspopup="dialog"
+                        aria-controls="privacy-dialog"
                     >
                         Datenschutzrichtlinien
-                    </span>
+                    </button>
                 </div>
 
                 <button
+                    type="button"
                     onClick={handleSubmit}
                     style={{
                         width: "100%",
@@ -193,66 +207,90 @@ Bei Fragen zum Datenschutz können Nutzer den Betreiber über die im Impressum a
                         color: "white",
                         cursor: checked1 && checked2 ? "pointer" : "not-allowed",
                         fontSize: "16px",
-                        fontWeight: "600",
+                        fontWeight: 600,
                     }}
                 >
                     Weiter
                 </button>
             </div>
 
-            {/* Modal */}
             {showModal && (
-                <div
+                <dialog
+                    open
+                    id={dialogId}
+                    aria-labelledby="dialog-title"
+                    aria-modal="true"
                     style={{
-                        position: "fixed",
-                        top: 0,
-                        left: 0,
-                        width: "100%",
-                        height: "100%",
-                        backgroundColor: "rgba(0,0,0,0.6)",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        padding: "16px",
-                        zIndex: 1000,
+                        border: "none",
+                        borderRadius: 12,
+                        maxWidth: 600,
+                        width: "min(600px, 92vw)",
+                        padding: 0,
+                        background: "transparent",
                     }}
                 >
+                    {/* Dark background and white Box */}
                     <div
                         style={{
-                            backgroundColor: "white",
-                            borderRadius: "12px",
-                            maxWidth: "600px",
-                            width: "100%",
-                            maxHeight: "80vh",
-                            overflowY: "auto",
-                            padding: "24px",
-                            position: "relative",
+                            position: "fixed",
+                            inset: 0,
+                            backgroundColor: "rgba(0,0,0,0.6)",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            padding: 16,
+                            zIndex: 1000,
                         }}
                     >
-                        <button
-                            onClick={() => setShowModal(null)}
+                        <div
                             style={{
-                                position: "absolute",
-                                top: "12px",
-                                right: "12px",
-                                background: "transparent",
-                                border: "none",
-                                fontSize: "20px",
-                                cursor: "pointer",
+                                backgroundColor: "white",
+                                borderRadius: 12,
+                                maxWidth: 600,
+                                width: "100%",
+                                maxHeight: "80vh",
+                                overflowY: "auto",
+                                padding: 24,
+                                position: "relative",
                             }}
                         >
-                            ×
-                        </button>
+                            <button
+                                type="button"
+                                onClick={() => setShowModal(null)}
+                                aria-label="Close"
+                                style={{
+                                    position: "absolute",
+                                    top: 12,
+                                    right: 12,
+                                    background: "transparent",
+                                    border: "none",
+                                    fontSize: 20,
+                                    cursor: "pointer",
+                                }}
+                            >
+                                ×
+                            </button>
 
-                        <h2 style={{ marginBottom: "12px" }}>
-                            {showModal === "agb" ? "Geschäftsbedingungen" : "Datenschutzrichtlinien"}
-                        </h2>
+                            <h2 id="dialog-title" style={{ marginBottom: 12 }}>
+                                {showModal === "agb" ? "Geschäftsbedingungen" : "Datenschutzrichtlinien"}
+                            </h2>
 
-                        <div style={{ fontSize: "14px", lineHeight: "1.6", whiteSpace: "pre-line" }}>
-                            {showModal === "agb" ? agbText : privacyText}
+                            <div style={{ fontSize: 14, lineHeight: 1.6, whiteSpace: "pre-line" }}>
+                                {showModal === "agb" ? agbText : privacyText}
+                            </div>
+
+                            <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 16 }}>
+                                <button
+                                    type="button"
+                                    onClick={() => setShowModal(null)}
+                                    style={{ padding: "8px 16px", borderRadius: 8 }}
+                                >
+                                    Schließen
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </dialog>
             )}
         </div>
     );

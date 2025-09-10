@@ -11,7 +11,6 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<HomePage />} />
-                {/* مسیر /welcome حذف شد */}
                 <Route path="/agb" element={<AgbPage />} />
                 <Route path="/game" element={<GameMenuPage />} />
             </Routes>
