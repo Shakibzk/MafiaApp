@@ -22,7 +22,6 @@ const HowToPlayPage: React.FC = () => {
         navigate("/");
     };
 
-    // scroll-to-top toggle
     useEffect(() => {
         const handleScroll = () => setShowScrollTop(window.scrollY > 200);
         window.addEventListener("scroll", handleScroll);
@@ -31,7 +30,6 @@ const HowToPlayPage: React.FC = () => {
 
     const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
-    // ---- styles ----
     const colors = {
         bg: "#2f2f2f",
         text: "#e9e9e9",
@@ -42,7 +40,7 @@ const HowToPlayPage: React.FC = () => {
 
     const pageStyle: React.CSSProperties = {
         width: "100%",
-        minHeight: "100vh", // ✅ اصلاح شد (قبلاً 100% بود و باعث می‌شد scroll کار نکنه)
+        minHeight: "100vh",
         backgroundColor: colors.bg,
         color: colors.text,
         boxSizing: "border-box",
@@ -230,11 +228,9 @@ const HowToPlayPage: React.FC = () => {
                             </h3>
                             <p style={{ fontSize: 12.5, lineHeight: 1.5, margin: 0 }}>
                                 Each night, may protect one Citizen from the Mafia’s attack.
-                                <br />
-                                <br />
+                                <br /><br />
                                 May protect himself only once per game.
-                                <br />
-                                <br />
+                                <br /><br />
                                 May protect others any number of times.
                             </p>
                         </div>
@@ -252,14 +248,11 @@ const HowToPlayPage: React.FC = () => {
                             </h3>
                             <p style={{ fontSize: 12.5, lineHeight: 1.5, margin: 0 }}>
                                 If a Mafia member dies, may recruit a new Mafia.
-                                <br />
-                                <br />
+                                <br /><br />
                                 Recruitment only works on Citizens.
-                                <br />
-                                <br />
+                                <br /><br />
                                 If targeting a powerful Citizen (Doctor, Detective, etc.) → recruitment fails.
-                                <br />
-                                <br />
+                                <br /><br />
                                 If successful → that Citizen joins the Mafia.
                             </p>
                         </div>
@@ -272,7 +265,17 @@ const HowToPlayPage: React.FC = () => {
                     secret Mafia members. The Mafia win by eliminating villagers. The villagers win by finding and eliminating
                     the Mafia.
                 </p>
-                <button style={learnBtn}>Learn about the characters</button>
+
+                {/* Scroll up*/}
+                <button
+                    style={learnBtn}
+                    onClick={() => {
+                        window.scrollTo(0, 0);
+                        navigate("/characters");
+                    }}
+                >
+                    Learn about the characters
+                </button>
 
                 <h2 style={h2Style}>Script for Host</h2>
                 <p style={{ ...pStyle, whiteSpace: "pre-line", maxWidth: 700, color: colors.textMuted }}>
