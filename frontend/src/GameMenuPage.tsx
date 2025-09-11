@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FiSettings, FiLogOut } from "react-icons/fi";
+import { FiLogOut } from "react-icons/fi";
 import appLogo from "./assets/app-logo.png";
 
 type MeResponse =
@@ -83,6 +83,7 @@ const GameMenuPage: React.FC = () => {
             >
                 <img src={appLogo} alt="Mafia Logo" style={{ width: 50, height: 50 }} />
 
+                {/* ✅ دایره آواتار حفظ شده؛ فقط آیکون چرخ‌دنده حذف شد */}
                 <button
                     onClick={() => setDrawerOpen(true)}
                     style={{
@@ -126,8 +127,6 @@ const GameMenuPage: React.FC = () => {
                 <span style={{ fontSize: 12, fontWeight: 700, color: "white" }}>{initials || "?"}</span>
             )}
           </span>
-
-                    <FiSettings size={20} />
                     <span>Settings{firstName ? ` • ${firstName}` : ""}</span>
                 </button>
             </div>
@@ -161,8 +160,12 @@ const GameMenuPage: React.FC = () => {
                     <button className="btn btn-primary" type="button">
                         Start Game
                     </button>
-                    <button className="btn btn-outline" type="button">
-                        Rules
+                    <button
+                        className="btn btn-outline"
+                        type="button"
+                        onClick={() => navigate("/how-to-play")}
+                    >
+                        How to play
                     </button>
                     <button className="btn btn-outline" type="button">
                         Roles
@@ -194,7 +197,14 @@ const GameMenuPage: React.FC = () => {
                                     </button>
                                 </li>
                                 <li>
-                                    <button type="button" className="drawer-link">
+                                    <button
+                                        type="button"
+                                        className="drawer-link"
+                                        onClick={() => {
+                                            navigate("/how-to-play");
+                                            setDrawerOpen(false);
+                                        }}
+                                    >
                                         How to play
                                     </button>
                                 </li>
@@ -226,7 +236,12 @@ const GameMenuPage: React.FC = () => {
                             </ul>
 
                             <div className="drawer-footer">
-                                <button type="button" className="drawer-link" onClick={handleSignOut} aria-label="Logout">
+                                <button
+                                    type="button"
+                                    className="drawer-link"
+                                    onClick={handleSignOut}
+                                    aria-label="Logout"
+                                >
                                     <FiLogOut style={{ marginRight: 8, verticalAlign: "-2px" }} />
                                     Logout
                                 </button>
