@@ -45,17 +45,14 @@ h1 {
     box-sizing: border-box;
 }
 
-/* Prevent scrolling and white margins */
+/* ✅ Scroll fix */
 html,
 body,
 #root {
-    height: 100%;
+    min-height: 100%;
     width: 100%;
-    overflow: hidden;
-    margin: 0;
-    padding: 0;
-    background: none;
-    display: flex;
+    overflow-x: hidden;  /* فقط اسکرول افقی رو می‌بندیم */
+    overflow-y: auto;    /* ✅ اسکرول عمودی فعال */
 }
 
 /* ===================== */
@@ -204,5 +201,3 @@ body,
     white-space: nowrap;
     border: 0;
 }
-
-
