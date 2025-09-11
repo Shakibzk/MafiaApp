@@ -26,11 +26,26 @@ const SettingsDrawer: React.FC<Props> = ({ open, onClose, onSignOut }) => {
                 </button>
 
                 <nav aria-label="Settings menu" className="drawer-nav">
-                    <h2 id="drawer-title" className="sr-only">Settings</h2>
+                    <h2 id="drawer-title" className="sr-only">
+                        Settings
+                    </h2>
                     <ul className="drawer-list">
-                        <li><button type="button" className="drawer-link" onClick={() => { navigate("/game"); onClose(); }}>Home</button></li>
-                        <li><button type="button" className="drawer-link" onClick={() => { navigate("/how-to-play"); onClose(); }}>How to play</button></li>
-                        <li><button type="button" className="drawer-link">Characters</button></li>
+                        <li>
+                            <button type="button" className="drawer-link" onClick={() => { navigate("/game"); onClose(); }}>
+                                Home
+                            </button>
+                        </li>
+                        <li>
+                            <button type="button" className="drawer-link" onClick={() => { navigate("/how-to-play"); onClose(); }}>
+                                How to play
+                            </button>
+                        </li>
+                        <li>
+                            {/* Characters link */}
+                            <button type="button" className="drawer-link" onClick={() => { navigate("/characters"); onClose(); }}>
+                                Characters
+                            </button>
+                        </li>
                         <li><button type="button" className="drawer-link">Invite Friends</button></li>
                         <li><button type="button" className="drawer-link">My account</button></li>
                         <li><button type="button" className="drawer-link">Language</button></li>
@@ -38,7 +53,12 @@ const SettingsDrawer: React.FC<Props> = ({ open, onClose, onSignOut }) => {
                     </ul>
 
                     <div className="drawer-footer">
-                        <button type="button" className="drawer-link" onClick={onSignOut} aria-label="Logout">
+                        <button
+                            type="button"
+                            className="drawer-link"
+                            onClick={onSignOut}
+                            aria-label="Logout"
+                        >
                             <FiLogOut style={{ marginRight: 8, verticalAlign: "-2px" }} />
                             Logout
                         </button>

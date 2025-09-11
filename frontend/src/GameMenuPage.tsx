@@ -83,7 +83,6 @@ const GameMenuPage: React.FC = () => {
             >
                 <img src={appLogo} alt="Mafia Logo" style={{ width: 50, height: 50 }} />
 
-                {/* ✅ دایره آواتار حفظ شده؛ فقط آیکون چرخ‌دنده حذف شد */}
                 <button
                     onClick={() => setDrawerOpen(true)}
                     style={{
@@ -167,13 +166,16 @@ const GameMenuPage: React.FC = () => {
                     >
                         How to play
                     </button>
-                    <button className="btn btn-outline" type="button">
-                        Roles
+                    <button
+                        className="btn btn-outline"
+                        type="button"
+                        onClick={() => navigate("/characters")}
+                    >
+                        Characters
                     </button>
                 </div>
             </div>
 
-            {/* Drawer (left) */}
             {drawerOpen && (
                 <dialog open className="drawer-dialog" aria-modal="true" aria-labelledby="drawer-title">
                     <aside className="drawer-panel">
@@ -208,8 +210,16 @@ const GameMenuPage: React.FC = () => {
                                         How to play
                                     </button>
                                 </li>
+                                {/* Characters Menu */}
                                 <li>
-                                    <button type="button" className="drawer-link">
+                                    <button
+                                        type="button"
+                                        className="drawer-link"
+                                        onClick={() => {
+                                            navigate("/characters");
+                                            setDrawerOpen(false);
+                                        }}
+                                    >
                                         Characters
                                     </button>
                                 </li>
