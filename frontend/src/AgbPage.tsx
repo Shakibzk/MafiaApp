@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import appLogo from "./assets/app-logo.png";
 
@@ -8,6 +8,21 @@ const AgbPage: React.FC = () => {
     const [showModal, setShowModal] = useState<null | "agb" | "privacy">(null);
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        (async () => {
+            try {
+                const res = await fetch("/api/user", { credentials: "include" });
+                if (!res.ok) return;
+                const data = await res.json();
+                if (data?.authenticated && data.user?.acceptedAgb) {
+                    navigate("/game", { replace: true });
+                }
+            } catch (err) {
+                console.error("AGB check failed:", err);
+            }
+        })();
+    }, [navigate]);
 
     const handleSubmit = async () => {
         if (checked1 && checked2) {
@@ -229,7 +244,6 @@ Bei Fragen zum Datenschutz können Nutzer den Betreiber über die im Impressum a
                         background: "transparent",
                     }}
                 >
-                    {/* Dark background and white Box */}
                     <div
                         style={{
                             position: "fixed",

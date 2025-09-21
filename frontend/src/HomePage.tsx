@@ -1,9 +1,30 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import githubLogo from "./assets/github.png";
 import googleLogo from "./assets/google.png";
 import appLogo from "./assets/app-logo.png"; // لوگوی Mafia
 
 const HomePage: React.FC = () => {
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        (async () => {
+            try {
+                const res = await fetch("/api/user", { credentials: "include" });
+                const data = await res.json();
+                if (data?.authenticated) {
+                    if (data?.user?.acceptedAgb) {
+                        navigate("/game", { replace: true });
+                    } else {
+                        navigate("/agb", { replace: true });
+                    }
+                }
+            } catch {
+                //
+            }
+        })();
+    }, [navigate]);
+
     return (
         <div
             style={{
@@ -23,7 +44,7 @@ const HomePage: React.FC = () => {
                 boxSizing: "border-box",
             }}
         >
-            {/* لوگوی Mafia */}
+            {/* Mafias logo */}
             <div style={{ marginBottom: "20px" }}>
                 <img
                     src={appLogo}
@@ -36,7 +57,7 @@ const HomePage: React.FC = () => {
                 />
             </div>
 
-            {/* عنوان اصلی */}
+            {/* main title */}
             <h1
                 style={{
                     fontSize: "clamp(24px, 6vw, 42px)",
@@ -49,7 +70,7 @@ const HomePage: React.FC = () => {
                 Welcome to Mafia Online
             </h1>
 
-            {/* متن زیرعنوان */}
+            {/* title text */}
             <p
                 style={{
                     fontSize: "clamp(14px, 4vw, 16px)",
@@ -61,7 +82,7 @@ const HomePage: React.FC = () => {
                 Trust no one. Work with your allies, deceive your enemies, and survive the night.
             </p>
 
-            {/* دکمه‌ها */}
+            {/* Buttons */}
             <div
                 style={{
                     display: "flex",
@@ -74,9 +95,7 @@ const HomePage: React.FC = () => {
             >
                 {/* Google */}
                 <button
-                    onClick={() =>
-                        (window.location.href = "/oauth2/authorization/google")
-                    }
+                    onClick={() => (window.location.href = "/oauth2/authorization/google")}
                     style={{
                         display: "flex",
                         alignItems: "center",
@@ -97,21 +116,13 @@ const HomePage: React.FC = () => {
                         maxWidth: "280px",
                     }}
                 >
-                    <img
-                        src={googleLogo}
-                        alt="Google"
-                        width={18}
-                        height={18}
-                        style={{ display: "block" }}
-                    />
+                    <img src={googleLogo} alt="Google" width={18} height={18} style={{ display: "block" }} />
                     <span>Sign in with Google</span>
                 </button>
 
                 {/* GitHub */}
                 <button
-                    onClick={() =>
-                        (window.location.href = "/oauth2/authorization/github")
-                    }
+                    onClick={() => (window.location.href = "/oauth2/authorization/github")}
                     style={{
                         display: "flex",
                         alignItems: "center",
@@ -145,5 +156,3 @@ const HomePage: React.FC = () => {
 };
 
 export default HomePage;
-
-

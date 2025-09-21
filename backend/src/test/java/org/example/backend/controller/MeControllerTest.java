@@ -22,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = MeController.class)
-@AutoConfigureMockMvc(addFilters = false) // فیلترهای امنیتی غیرفعال؛ ریدایرکت/CSRF نداریم
+@AutoConfigureMockMvc(addFilters = false)
 @Import(MeControllerTest.Config.class)
 class MeControllerTest {
 
@@ -39,7 +39,6 @@ class MeControllerTest {
 
     @Test
     void shouldReturnUnauthenticated_WhenNoAuth() throws Exception {
-        // بدون کاربر در کانتکست → authenticated=false
         mockMvc.perform(get("/api/user").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.authenticated").value(false));
@@ -61,7 +60,7 @@ class MeControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "notfound") // کاربر لاگین‌شده اما در DB نیست
+    @WithMockUser(username = "notfound")
     void shouldReturn404_WhenUserNotFound() throws Exception {
         given(userService.findById("notfound")).willReturn(Optional.empty());
 
