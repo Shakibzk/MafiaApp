@@ -39,7 +39,8 @@ public class SecurityConfig {
                                 "/static/**", "/assets/**",
                                 "/oauth2/**", "/login/**",
                                 "/api/users/register",
-                                "/api/user"
+                                "/api/user",
+                                "/api/lobbies/playerByCode/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

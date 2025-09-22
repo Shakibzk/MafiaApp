@@ -21,9 +21,9 @@ const GameMenuPage: React.FC = () => {
             try {
                 const res = await fetch("/api/user", { credentials: "include" });
                 const data: MeResponse = await res.json();
-                if (data && "authenticated" in data && data.authenticated) {
-                    setFirstName(data.user.firstName ?? null);
-                    setAvatarUrl(data.user.avatarUrl ?? null);
+                if (data?.authenticated) {
+                    setFirstName(data.user?.firstName ?? null);
+                    setAvatarUrl(data.user?.avatarUrl ?? null);
                 } else {
                     setFirstName(null);
                     setAvatarUrl(null);
@@ -37,7 +37,7 @@ const GameMenuPage: React.FC = () => {
 
     const handleSignOut = async () => {
         try {
-            await fetch("http://localhost:8080/logout", {
+            await fetch("/logout", {
                 method: "POST",
                 credentials: "include",
             });
@@ -83,20 +83,15 @@ const GameMenuPage: React.FC = () => {
             >
                 <img src={appLogo} alt="Mafia Logo" style={{ width: 50, height: 50 }} />
 
-                <button
-                    onClick={() => setDrawerOpen(true)}
+                <div
                     style={{
-                        background: "transparent",
-                        border: "none",
-                        color: "white",
-                        cursor: "pointer",
-                        fontSize: 18,
                         display: "flex",
                         alignItems: "center",
                         gap: 10,
+                        color: "white",
+                        fontSize: 16,
+                        fontWeight: 500,
                     }}
-                    aria-label="Open settings"
-                    type="button"
                 >
           <span
               style={{
@@ -110,7 +105,6 @@ const GameMenuPage: React.FC = () => {
                   background: "rgba(255,255,255,0.2)",
                   border: "1px solid rgba(255,255,255,0.35)",
               }}
-              aria-hidden="true"
           >
             {avatarUrl ? (
                 <img
@@ -118,19 +112,31 @@ const GameMenuPage: React.FC = () => {
                     alt="avatar"
                     referrerPolicy="no-referrer"
                     style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-                    onError={(e) => {
-                        (e.currentTarget as HTMLImageElement).style.display = "none";
-                    }}
                 />
             ) : (
-                <span style={{ fontSize: 12, fontWeight: 700, color: "white" }}>{initials || "?"}</span>
+                <span style={{ fontSize: 12, fontWeight: 700 }}>{initials || "?"}</span>
             )}
           </span>
-                    <span>Settings{firstName ? ` • ${firstName}` : ""}</span>
-                </button>
+
+                    <span>{firstName || "Player"}</span>
+
+                    <button
+                        onClick={() => setDrawerOpen(true)}
+                        style={{
+                            background: "transparent",
+                            border: "none",
+                            color: "white",
+                            cursor: "pointer",
+                            fontSize: 16,
+                        }}
+                        type="button"
+                    >
+                        Settings
+                    </button>
+                </div>
             </div>
 
-            {/* Title + main buttons */}
+            {/* Title + buttons */}
             <div
                 style={{
                     flexGrow: 1,
@@ -152,25 +158,14 @@ const GameMenuPage: React.FC = () => {
                     Shall we play Mafia?
                 </h1>
 
-                <div
-                    className="menu-buttons"
-                    style={{ display: "flex", gap: 16, flexWrap: "wrap", justifyContent: "center" }}
-                >
-                    <button className="btn btn-primary" type="button">
+                <div style={{ display: "flex", gap: 16, flexWrap: "wrap", justifyContent: "center" }}>
+                    <button className="btn btn-primary" type="button" onClick={() => navigate("/start-game")}>
                         Start Game
                     </button>
-                    <button
-                        className="btn btn-outline"
-                        type="button"
-                        onClick={() => navigate("/how-to-play")}
-                    >
+                    <button className="btn btn-outline" type="button" onClick={() => navigate("/how-to-play")}>
                         How to play
                     </button>
-                    <button
-                        className="btn btn-outline"
-                        type="button"
-                        onClick={() => navigate("/characters")}
-                    >
+                    <button className="btn btn-outline" type="button" onClick={() => navigate("/characters")}>
                         Characters
                     </button>
                 </div>
@@ -189,9 +184,7 @@ const GameMenuPage: React.FC = () => {
                         </button>
 
                         <nav aria-label="Settings menu" className="drawer-nav">
-                            <h2 id="drawer-title" className="sr-only">
-                                Settings
-                            </h2>
+                            <h2 id="drawer-title" className="sr-only">Settings</h2>
                             <ul className="drawer-list">
                                 <li>
                                     <button type="button" className="drawer-link" onClick={handleGoHome}>
@@ -210,7 +203,6 @@ const GameMenuPage: React.FC = () => {
                                         How to play
                                     </button>
                                 </li>
-                                {/* Characters Menu */}
                                 <li>
                                     <button
                                         type="button"
@@ -223,26 +215,10 @@ const GameMenuPage: React.FC = () => {
                                         Characters
                                     </button>
                                 </li>
-                                <li>
-                                    <button type="button" className="drawer-link">
-                                        Invite Friends
-                                    </button>
-                                </li>
-                                <li>
-                                    <button type="button" className="drawer-link">
-                                        My account
-                                    </button>
-                                </li>
-                                <li>
-                                    <button type="button" className="drawer-link">
-                                        Language
-                                    </button>
-                                </li>
-                                <li>
-                                    <button type="button" className="drawer-link">
-                                        AGB
-                                    </button>
-                                </li>
+                                <li><button type="button" className="drawer-link">Invite Friends</button></li>
+                                <li><button type="button" className="drawer-link">My account</button></li>
+                                <li><button type="button" className="drawer-link">Language</button></li>
+                                <li><button type="button" className="drawer-link">AGB</button></li>
                             </ul>
 
                             <div className="drawer-footer">

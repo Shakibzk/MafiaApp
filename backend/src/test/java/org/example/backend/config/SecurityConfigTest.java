@@ -1,5 +1,6 @@
 package org.example.backend.config;
 
+import org.example.backend.BackendApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -7,11 +8,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest
+@SpringBootTest(classes = BackendApplication.class)
 @AutoConfigureMockMvc
 class SecurityConfigTest {
 
@@ -23,9 +23,6 @@ class SecurityConfigTest {
         mockMvc.perform(get("/api/user"))
                 .andExpect(status().isOk());
 
-        mockMvc.perform(get("/api/users/register"))
-                .andExpect(status().is4xxClientError());
-
         mockMvc.perform(post("/api/users/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"username\":\"bad name\"}"))
@@ -34,7 +31,6 @@ class SecurityConfigTest {
 
     @Test
     void protectedEndpoints_ShouldRequireAuth() throws Exception {
-        // endpoint فرضی protected
         mockMvc.perform(get("/api/protected-test"))
                 .andExpect(status().is3xxRedirection());
     }

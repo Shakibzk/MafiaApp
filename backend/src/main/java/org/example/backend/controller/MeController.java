@@ -19,7 +19,6 @@ public class MeController {
 
     @GetMapping("/api/user")
     public ResponseEntity<Map<String, Object>> me() {
-        // از SecurityContextHolder استفاده می‌کنیم تا در تست (بدون فیلترهای امنیتی) هم درست کار کند
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null

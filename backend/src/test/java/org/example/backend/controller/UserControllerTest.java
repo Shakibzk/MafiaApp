@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = UserController.class)
-@AutoConfigureMockMvc(addFilters = false) // جلوگیری از 403 (CSRF) و رفتار پیش‌فرض امنیت
+@AutoConfigureMockMvc(addFilters = false)
 @Import(UserControllerTest.Config.class)
 class UserControllerTest {
 
